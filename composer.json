@@ -1,6 +1,6 @@
 {
-  "name": "woodynew/hyperf-thrift",
-  "description": "thrift framework on hyperf server",
+  "name": "woodynew/hyperf-thrift-client",
+  "description": "thrift client framework on hyperf server",
   "keywords": [
     "php",
     "swoole",
