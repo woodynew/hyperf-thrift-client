@@ -22,11 +22,11 @@ composer require woodynew/hyperf-thrift-client
     <?php
     /**
      * thrift客户端，共用一个连接
-     * @author xialeistudio
-     * @date 2019-05-16
+     * @author woody
+     * @date 2023-04-09
      */
     
-    use swoole\foundation\thrift\client\Transport;
+    use Woodynew\Hyperf\ThriftClient\Transport;
     use tests\services\SumService\SumServiceClient;
     use Thrift\Protocol\TBinaryProtocol;
     use Thrift\Transport\TFramedTransport;
