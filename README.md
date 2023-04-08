@@ -1,65 +1,20 @@
-# swoole-thrift
-基于基于swoole协程的thrift服务端。
+# hyperf-thrift-client
+基于hyperf非堵塞协程的thrift客户端。
 
 基于thrift标准接口编程，使用方法与原生thrift一致。
 
 ## version
 
 + swoole 4.x
-+ thrift 0.12
++ thrift 0.18
 
 ## 使用方法
 
 ```bash
-composer require swoole-foundation/swoole-thrift
+composer require woodynew/hyperf-thrift-client
 ```
 
 ## 示例代码
-
-+ Server
-    
-    ```php
-    <?php
-    /**
-     * thrift服务端
-     * @author xialeistudio
-     * @date 2019-05-16
-     */
-    
-    use swoole\foundation\thrift\factory\TFramedTransportFactory;
-    use swoole\foundation\thrift\server\SwooleServer;
-    use swoole\foundation\thrift\server\SwooleServerTransport;
-    use Swoole\Server;
-    use tests\handler\SumServiceImpl;
-    use tests\services\SumService\SumServiceProcessor;
-    use Thrift\Exception\TTransportException;
-    use Thrift\Factory\TBinaryProtocolFactory;
-    
-    require __DIR__ . '/vendor/autoload.php';
-    
-    $processor = new SumServiceProcessor(new SumServiceImpl());
-    
-    $serverTransport = new SwooleServerTransport('localhost');
-    $transportFactory = new TFramedTransportFactory();
-    $protocolFactory = new TBinaryProtocolFactory();
-    $server = new SwooleServer(
-        $processor,
-        $serverTransport,
-        $transportFactory,
-        $transportFactory,
-        $protocolFactory,
-        $protocolFactory
-    );
-    
-    try {
-        $server->on('start', function (Server $server) {
-            printf("Server::serve on %s:%d\n", $server->host, $server->port);
-        });
-        $server->serve();
-    } catch (TTransportException $e) {
-        printf("Server::serve error: {$e->getMessage()}\n");
-    }
-    ```
  
  + Client
     
