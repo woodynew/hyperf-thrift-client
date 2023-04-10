@@ -8,16 +8,13 @@
         "thrift",
         "rpc"
     ],
-    "type": "library",
     "license": "MIT",
-    "version": "1.0.0",
     "authors": [
         {
             "name": "woody",
             "email": "78925880@qq.com"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
         "php": ">=8.0",
         "hyperf/utils": "~3.0.0",
@@ -34,6 +31,9 @@
         "psr-4": {
             "tests\\": "tests/"
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "extra": {
         "hyperf": {
