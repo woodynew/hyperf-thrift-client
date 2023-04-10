@@ -13,15 +13,6 @@ use Swoole\Client as SwooleSocketClient;
  */
 class Client extends TTransport
 {
-    /**
-     * @var string 连接地址
-     */
-    protected string $host;
-    /**
-     * @var int 连接端口
-     */
-    protected int $port;
-
     private ?SwooleSocketClient $socketClient = null;
 
     /**
@@ -29,10 +20,8 @@ class Client extends TTransport
      * @param string $host
      * @param int $port
      */
-    public function __construct(string $host, int $port)
+    public function __construct(protected string $host, protected int $port)
     {
-        $this->host = $host;
-        $this->port = $port;
     }
 
     public function getSocketClient(): SwooleSocketClient
