@@ -1,11 +1,12 @@
 <?php
+
 /**
  * thrift客户端，共用一个连接
  * @author xialeistudio
  * @date 2019-05-16
  */
 
-use Woodynew\Hyperf\ThriftClient\Transport;
+use Woodynew\Hyperf\ThriftClient\Client as Transport;
 use tests\services\SumService\SumServiceClient;
 use Thrift\Protocol\TBinaryProtocol;
 use Thrift\Transport\TFramedTransport;

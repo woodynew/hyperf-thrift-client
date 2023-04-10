@@ -1,21 +1,17 @@
 <?php
-/**
- * @author xialeistudio
- */
+
+declare(strict_types=1);
 
 namespace Woodynew\Hyperf\ThriftClient;
 
 use Thrift\Transport\TTransport;
 use Thrift\Exception\TTransportException;
-use Swoole\Coroutine\Socket as SwooleSocketClient;
-use function Swoole\Coroutine\run;
+use Swoole\Client as SwooleSocketClient;
 
 /**
  * Swoole同步阻塞客户端
- * Class SwooleTransport
- * @package thrift\transport
  */
-class Transport extends TTransport
+class Client extends TTransport
 {
     /**
      * @var string 连接地址
@@ -41,7 +37,7 @@ class Transport extends TTransport
 
     public function getSocketClient(): SwooleSocketClient
     {
-        if (! $this->socketClient instanceof SwooleSocketClient) {
+        if (!$this->socketClient instanceof SwooleSocketClient) {
             $this->socketClient = $this->buildSocketClient();
         }
         return $this->socketClient;
@@ -54,7 +50,8 @@ class Transport extends TTransport
      */
     public function isOpen(): bool
     {
-        return $this->socketClient->socket > 0;
+        return $this->getSocketClient()->isConnected();
+        return $this->getSocketClient()->sock > 0;
     }
 
     /**
@@ -67,9 +64,12 @@ class Transport extends TTransport
         if ($this->isOpen()) {
             throw new TTransportException('ClientTransport already open.', TTransportException::ALREADY_OPEN);
         }
-        if (!$this->socketClient->connect($this->host, $this->port)) {
-            throw new TTransportException('ClientTransport could not open:' . $this->socketClient->errCode,
-                TTransportException::UNKNOWN);
+
+        if (!$this->getSocketClient()->connect($this->host, $this->port)) {
+            throw new TTransportException(
+                'ClientTransport could not open:' . $this->getSocketClient()->errCode,
+                TTransportException::UNKNOWN
+            );
         }
     }
 
@@ -82,7 +82,7 @@ class Transport extends TTransport
         if (!$this->isOpen()) {
             throw new TTransportException('ClientTransport not open.', TTransportException::NOT_OPEN);
         }
-        $this->connect->close();
+        $this->getSocketClient()->close();
     }
 
     /**
@@ -97,7 +97,7 @@ class Transport extends TTransport
         if (!$this->isOpen()) {
             throw new TTransportException('ClientTransport not open.', TTransportException::NOT_OPEN);
         }
-        return $this->connect->recv($len, 5);
+        return $this->getSocketClient()->recv($len);
     }
 
     /**
@@ -111,13 +111,12 @@ class Transport extends TTransport
         if (!$this->isOpen()) {
             throw new TTransportException('ClientTransport not open.', TTransportException::NOT_OPEN);
         }
-        $this->connect->send($buf, 5);
+        $this->getSocketClient()->send($buf);
     }
 
     private function buildSocketClient(): SwooleSocketClient
     {
-        $socketClient = new SwooleSocketClient(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        $retval = $socketClient->connect($this->host, $this->port);
+        $socketClient = new SwooleSocketClient(SWOOLE_SOCK_TCP);
         return $socketClient;
     }
 }
